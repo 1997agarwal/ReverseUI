@@ -5,6 +5,7 @@ import { LiveSandbox } from './components/LiveSandbox';
 import { EvidencePanel } from './components/EvidencePanel';
 import { StatsBar } from './components/StatsBar';
 import { BookmarkletModal } from './components/BookmarkletModal';
+import { HowItWorksModal } from './components/HowItWorksModal';
 import { SHOWCASE_PRESETS, Preset } from './lib/presets';
 import { reverseEngineerSnippet, ReverseEngineResult } from './lib/reverseEngine';
 
@@ -13,6 +14,7 @@ export function App() {
   const [snippet, setSnippet] = useState<string>(SHOWCASE_PRESETS[0].rawSnippet);
   const [autoDecompile, setAutoDecompile] = useState<boolean>(true);
   const [bookmarkletOpen, setBookmarkletOpen] = useState<boolean>(false);
+  const [howItWorksOpen, setHowItWorksOpen] = useState<boolean>(false);
   const [activeMobileView, setActiveMobileView] = useState<'input' | 'sandbox' | 'evidence'>('sandbox');
 
   // Check URL query parameters for snippet captured via bookmarklet
@@ -51,6 +53,7 @@ export function App() {
         currentPresetId={currentPresetId}
         onSelectPreset={handleSelectPreset}
         onOpenBookmarklet={() => setBookmarkletOpen(true)}
+        onOpenHowItWorks={() => setHowItWorksOpen(true)}
         onReset={handleReset}
       />
 
@@ -151,6 +154,13 @@ export function App() {
       <BookmarkletModal
         isOpen={bookmarkletOpen}
         onClose={() => setBookmarkletOpen(false)}
+      />
+
+      {/* 5. How It Works Modal (PM & Designer Guide) */}
+      <HowItWorksModal
+        isOpen={howItWorksOpen}
+        onClose={() => setHowItWorksOpen(false)}
+        onOpenBookmarklet={() => setBookmarkletOpen(true)}
       />
     </div>
   );

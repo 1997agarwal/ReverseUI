@@ -6,6 +6,7 @@ interface HeaderProps {
   currentPresetId: string;
   onSelectPreset: (preset: Preset) => void;
   onOpenBookmarklet: () => void;
+  onOpenHowItWorks: () => void;
   onReset: () => void;
 }
 
@@ -13,6 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentPresetId,
   onSelectPreset,
   onOpenBookmarklet,
+  onOpenHowItWorks,
   onReset,
 }) => {
   return (
@@ -62,6 +64,15 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={onOpenHowItWorks}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 hover:from-cyan-500/20 hover:to-indigo-500/20 text-cyan-300 border border-cyan-500/30 transition-all"
+            title="How It Works (Guide for PMs & Designers)"
+          >
+            <span>💡</span>
+            <span>How It Works</span>
+          </button>
+
           <button
             onClick={onOpenBookmarklet}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 transition-colors"
