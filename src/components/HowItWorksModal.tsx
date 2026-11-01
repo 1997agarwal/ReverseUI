@@ -90,9 +90,9 @@ export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({
                   <div className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center text-xs">
                     1
                   </div>
-                  <h4 className="font-bold text-slate-200 text-xs">One-Time Setup (5 seconds)</h4>
+                  <h4 className="font-bold text-slate-200 text-xs">Setup (5 seconds)</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Click <strong>"Get Bookmarklet"</strong> in the top header and drag the <strong>🔍 ReverseUI Inspector</strong> pill to your browser's bookmarks bar.
+                    Click <strong>"Get Bookmarklet"</strong> and drag the <strong>🔍 ReverseUI Inspector</strong> pill to your browser's bookmarks bar.
                   </p>
                 </div>
 
@@ -100,9 +100,9 @@ export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({
                   <div className="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 font-bold flex items-center justify-center text-xs">
                     2
                   </div>
-                  <h4 className="font-bold text-slate-200 text-xs">Spot Any UI You Love</h4>
+                  <h4 className="font-bold text-slate-200 text-xs">Click the Bookmark</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Browse Stripe, Linear, Apple, or any SaaS product. Hover your mouse over the button, card, modal, or navbar you want.
+                    On any website (Stripe, Linear, Apple), click the bookmark. An inspector mode activates with a blue banner at the top.
                   </p>
                 </div>
 
@@ -110,9 +110,9 @@ export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({
                   <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 font-bold flex items-center justify-center text-xs">
                     3
                   </div>
-                  <h4 className="font-bold text-slate-200 text-xs">Click the Bookmark</h4>
+                  <h4 className="font-bold text-slate-200 text-xs">Point & Click the Element</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Click your bookmarklet! ReverseUI instantly opens with the component running in your sandbox and ready-to-copy code.
+                    Move your mouse and click on the button, card, or navbar. ReverseUI opens instantly with that exact component decompiled!
                   </p>
                 </div>
               </div>

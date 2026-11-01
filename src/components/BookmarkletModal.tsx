@@ -11,30 +11,84 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
 
   if (!isOpen) return null;
 
-  // The bookmarklet script extracts the targeted element and opens ReverseUI with encoded html
+  // The bookmarklet activates an interactive "Click-to-Pick" inspector overlay on any page!
   const bookmarkletCode = `javascript:(function(){
-  var hoveredEl = document.querySelector(':hover');
-  var target = hoveredEl || document.activeElement || document.body;
-  if(!target || target === document.body){
-    alert('Please hover your mouse over an interesting element before clicking ReverseUI!');
-    return;
+  if(window.__reverseUiActive) return;
+  window.__reverseUiActive = true;
+
+  /* 1. Create floating top banner */
+  var banner = document.createElement('div');
+  banner.id = '__reverseui_banner';
+  banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#0f172a;color:#f8fafc;padding:10px 18px;border-radius:12px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:13px;font-weight:600;box-shadow:0 20px 25px -5px rgba(0,0,0,0.6);border:1px solid #38bdf8;display:flex;align-items:center;gap:10px;pointer-events:none;';
+  banner.innerHTML = '<span style="font-size:16px;">🔍</span> <span>Click any element to reverse engineer it into React + Tailwind (Esc to cancel)</span>';
+  document.body.appendChild(banner);
+
+  /* 2. Create interactive hover highlight box */
+  var box = document.createElement('div');
+  box.id = '__reverseui_box';
+  box.style.cssText = 'position:fixed;pointer-events:none;z-index:2147483646;border:2px solid #38bdf8;background:rgba(56,189,248,0.18);border-radius:6px;transition:all 0.08s ease-out;display:none;';
+  document.body.appendChild(box);
+
+  var currentTarget = null;
+
+  function onMouseMove(e){
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    if(!el || el === banner || el === box || el.contains(banner)) return;
+    currentTarget = el;
+    var rect = el.getBoundingClientRect();
+    box.style.display = 'block';
+    box.style.top = rect.top + 'px';
+    box.style.left = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+    box.style.height = rect.height + 'px';
   }
-  var clone = target.cloneNode(true);
-  var html = clone.outerHTML;
-  var computed = window.getComputedStyle(target);
-  var css = '<style>\\n/* Extracted style */\\n.extracted-element { ' +
-    'background-color: ' + computed.backgroundColor + '; ' +
-    'color: ' + computed.color + '; ' +
-    'font-size: ' + computed.fontSize + '; ' +
-    'font-weight: ' + computed.fontWeight + '; ' +
-    'border-radius: ' + computed.borderRadius + '; ' +
-    'box-shadow: ' + computed.boxShadow + '; ' +
-    'backdrop-filter: ' + (computed.backdropFilter || 'none') + '; ' +
-    'transition: ' + (computed.transition || 'none') + '; ' +
-    '}\\n</style>';
-  var fullSnippet = css + '\\n' + html;
-  var url = 'https://1997agarwal.github.io/ReverseUI/?snippet=' + encodeURIComponent(fullSnippet);
-  window.open(url, '_blank');
+
+  function cleanup(){
+    window.__reverseUiActive = false;
+    document.removeEventListener('mousemove', onMouseMove, true);
+    document.removeEventListener('click', onClick, true);
+    document.removeEventListener('keydown', onKeyDown, true);
+    if(banner.parentNode) banner.parentNode.removeChild(banner);
+    if(box.parentNode) box.parentNode.removeChild(box);
+  }
+
+  function onClick(e){
+    e.preventDefault();
+    e.stopPropagation();
+    if(!currentTarget) return;
+    var target = currentTarget;
+    cleanup();
+
+    var clone = target.cloneNode(true);
+    var html = clone.outerHTML;
+    var computed = window.getComputedStyle(target);
+    var css = '<style>\\n.extracted-element { ' +
+      'background-color: ' + computed.backgroundColor + '; ' +
+      'color: ' + computed.color + '; ' +
+      'font-size: ' + computed.fontSize + '; ' +
+      'font-weight: ' + computed.fontWeight + '; ' +
+      'border-radius: ' + computed.borderRadius + '; ' +
+      'box-shadow: ' + computed.boxShadow + '; ' +
+      'backdrop-filter: ' + (computed.backdropFilter || 'none') + '; ' +
+      'transition: ' + (computed.transition || 'none') + '; ' +
+      '}\\n</style>';
+
+    var fullSnippet = css + '\\n' + html;
+    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    var baseUrl = isLocal ? 'http://localhost:5174/ReverseUI/' : 'https://1997agarwal.github.io/ReverseUI/';
+    var url = baseUrl + '?snippet=' + encodeURIComponent(fullSnippet);
+    window.open(url, '_blank');
+  }
+
+  function onKeyDown(e){
+    if(e.key === 'Escape'){
+      cleanup();
+    }
+  }
+
+  document.addEventListener('mousemove', onMouseMove, true);
+  document.addEventListener('click', onClick, true);
+  document.addEventListener('keydown', onKeyDown, true);
 })();`;
 
   const handleCopy = () => {
@@ -53,8 +107,8 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
               <Bookmark className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-bold text-base text-white">ReverseUI 1-Click Bookmarklet</h3>
-              <p className="text-xs text-slate-400">Capture any UI snippet from any website into React + Tailwind</p>
+              <h3 className="font-bold text-base text-white">Interactive Click-to-Pick Bookmarklet</h3>
+              <p className="text-xs text-slate-400">Click the bookmark first, then point & click any element on the page!</p>
             </div>
           </div>
           <button
@@ -74,9 +128,8 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
             <a
               href={bookmarkletCode}
               onClick={(e) => {
-                // If clicked instead of dragged, notify user
                 e.preventDefault();
-                alert('Drag this button to your bookmarks bar, then click it while browsing any web page!');
+                alert('Drag this button up to your browser bookmarks bar! Then on any website, click it to activate Click-to-Pick mode.');
               }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105 active:scale-95 transition-all cursor-grab"
             >
@@ -84,26 +137,31 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
               🔍 ReverseUI Inspector
             </a>
             <span className="text-[11px] text-slate-500">
-              Works in Chrome, Safari, Firefox, Edge, and Arc. Zero server tracking.
+              Chrome • Safari • Firefox • Edge • Arc • 100% Client-Side
             </span>
           </div>
 
-          <div className="space-y-2">
-            <h4 className="font-semibold text-slate-200 text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <MousePointerClick className="w-3.5 h-3.5 text-cyan-400" /> How It Works
+          <div className="space-y-2.5 p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <h4 className="font-bold text-slate-200 text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <MousePointerClick className="w-3.5 h-3.5 text-cyan-400" /> How It Works in 2 Simple Clicks:
             </h4>
-            <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-400 pl-1 leading-relaxed">
-              <li>Navigate to any web page (e.g., Linear, Stripe, Apple, Vercel).</li>
-              <li>Hover over or select any button, card, modal, or navigation bar.</li>
-              <li>Click your <strong className="text-slate-200">🔍 ReverseUI Inspector</strong> bookmark.</li>
-              <li>ReverseUI instantly opens with extracted DOM tokens, spring physics, and clean React code!</li>
+            <ol className="list-decimal list-inside space-y-2 text-xs text-slate-400 pl-1 leading-relaxed">
+              <li>
+                <strong className="text-slate-200">Click the bookmark:</strong> A blue banner appears at the top saying <em>"Click any element to reverse engineer it"</em>.
+              </li>
+              <li>
+                <strong className="text-slate-200">Point & Click:</strong> Move your mouse across the page. A glowing box highlights elements. Simply click on the button, card, or modal you want!
+              </li>
+              <li>
+                <strong className="text-slate-200">Instant Export:</strong> ReverseUI opens automatically with that exact element decompiled into clean React + Tailwind.
+              </li>
             </ol>
           </div>
 
           {/* Copy Script directly */}
           <div className="pt-2">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs text-slate-400 font-medium">Or copy script manually:</span>
+              <span className="text-xs text-slate-400 font-medium">Or copy bookmark code manually:</span>
               <button
                 onClick={handleCopy}
                 className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-semibold"
