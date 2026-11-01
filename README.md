@@ -165,6 +165,18 @@ $ npm test
 
 ---
 
+## 👤 Author
+
+**Harshit Agarwal**  
+*AI Product Manager & 0-to-1 Systems Builder*  
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-181717?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/1997agarwal)
+[![X](https://img.shields.io/badge/X-Follow_%401997agarwal-181717?style=flat-square&logo=x&logoColor=white)](https://x.com/1997agarwal)
+[![GitHub](https://img.shields.io/badge/GitHub-Explore_Repos-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/1997agarwal)
+[![Email](https://img.shields.io/badge/Email-Get_in_Touch-181717?style=flat-square&logo=gmail&logoColor=white)](mailto:agarwal.harshit97@gmail.com)
+
+---
+
 ## 📄 License
 
 MIT License — Copyright (c) 2026 Harshit Agarwal ([1997agarwal](https://github.com/1997agarwal)). See [LICENSE](./LICENSE) for details.
