@@ -105,6 +105,7 @@ export function App() {
               onTriggerDecompile={() => {}}
               autoDecompile={autoDecompile}
               onToggleAutoDecompile={setAutoDecompile}
+              onOpenBookmarklet={() => setBookmarkletOpen(true)}
             />
           </div>
 
@@ -133,6 +134,7 @@ export function App() {
               onTriggerDecompile={() => {}}
               autoDecompile={autoDecompile}
               onToggleAutoDecompile={setAutoDecompile}
+              onOpenBookmarklet={() => setBookmarkletOpen(true)}
             />
           )}
 
