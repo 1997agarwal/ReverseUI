@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, Bookmark, MousePointerClick, Sparkles } from 'lucide-react';
+import { X, Copy, Check, Bookmark, MousePointerClick, Sparkles, Laptop } from 'lucide-react';
 
 interface BookmarkletModalProps {
   isOpen: boolean;
@@ -8,8 +8,17 @@ interface BookmarkletModalProps {
 
 export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
+  const [useProduction, setUseProduction] = useState(false);
 
   if (!isOpen) return null;
+
+  // Detect current active URL of ReverseUI (e.g. http://localhost:5174/ReverseUI/)
+  const currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5174';
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/ReverseUI/';
+  const localBaseUrl = `${currentOrigin}${currentPath.endsWith('/') ? currentPath : currentPath + '/'}`;
+  const productionBaseUrl = 'https://1997agarwal.github.io/ReverseUI/';
+
+  const targetBaseUrl = useProduction ? productionBaseUrl : localBaseUrl;
 
   // The bookmarklet activates an interactive "Click-to-Pick" inspector overlay on any page!
   const bookmarkletCode = `javascript:(function(){
@@ -74,10 +83,8 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
       '}\\n</style>';
 
     var fullSnippet = css + '\\n' + html;
-    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    var baseUrl = isLocal ? 'http://localhost:5174/ReverseUI/' : 'https://1997agarwal.github.io/ReverseUI/';
-    var url = baseUrl + '?snippet=' + encodeURIComponent(fullSnippet);
-    window.open(url, '_blank');
+    var targetUrl = "${targetBaseUrl}?snippet=" + encodeURIComponent(fullSnippet);
+    window.open(targetUrl, '_blank');
   }
 
   function onKeyDown(e){
@@ -98,7 +105,7 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-xl rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl text-slate-100">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -108,7 +115,7 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
             </div>
             <div>
               <h3 className="font-bold text-base text-white">Interactive Click-to-Pick Bookmarklet</h3>
-              <p className="text-xs text-slate-400">Click the bookmark first, then point & click any element on the page!</p>
+              <p className="text-xs text-slate-400">Captures any element and opens ReverseUI</p>
             </div>
           </div>
           <button
@@ -119,8 +126,38 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
           </button>
         </div>
 
+        {/* Target Switcher */}
+        <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+          <span className="text-slate-400 flex items-center gap-1.5">
+            <Laptop className="w-3.5 h-3.5 text-cyan-400" />
+            Destination:
+          </span>
+          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
+            <button
+              onClick={() => setUseProduction(false)}
+              className={`px-2.5 py-1 rounded text-xs font-semibold transition-all ${
+                !useProduction
+                  ? 'bg-cyan-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Local App ({localBaseUrl.replace(/https?:\/\//, '').replace(/\/$/, '')})
+            </button>
+            <button
+              onClick={() => setUseProduction(true)}
+              className={`px-2.5 py-1 rounded text-xs font-semibold transition-all ${
+                useProduction
+                  ? 'bg-cyan-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              GitHub Pages (1997agarwal)
+            </button>
+          </div>
+        </div>
+
         {/* Content */}
-        <div className="py-5 space-y-4 text-xs sm:text-sm text-slate-300">
+        <div className="py-4 space-y-4 text-xs sm:text-sm text-slate-300">
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col items-center justify-center text-center gap-3">
             <span className="text-slate-400 text-xs">
               👉 Drag this pill directly onto your browser's <strong className="text-slate-200">Bookmarks Bar</strong>:
@@ -137,7 +174,7 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
               🔍 ReverseUI Inspector
             </a>
             <span className="text-[11px] text-slate-500">
-              Chrome • Safari • Firefox • Edge • Arc • 100% Client-Side
+              Points to: <code className="text-cyan-400 font-mono">{targetBaseUrl}</code>
             </span>
           </div>
 
@@ -145,21 +182,21 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
             <h4 className="font-bold text-slate-200 text-xs uppercase tracking-wider flex items-center gap-1.5">
               <MousePointerClick className="w-3.5 h-3.5 text-cyan-400" /> How It Works in 2 Simple Clicks:
             </h4>
-            <ol className="list-decimal list-inside space-y-2 text-xs text-slate-400 pl-1 leading-relaxed">
+            <ol className="list-decimal list-inside space-y-1.5 text-xs text-slate-400 pl-1 leading-relaxed">
               <li>
-                <strong className="text-slate-200">Click the bookmark:</strong> A blue banner appears at the top saying <em>"Click any element to reverse engineer it"</em>.
+                <strong className="text-slate-200">Click bookmark on any site:</strong> A blue banner appears at the top.
               </li>
               <li>
-                <strong className="text-slate-200">Point & Click:</strong> Move your mouse across the page. A glowing box highlights elements. Simply click on the button, card, or modal you want!
+                <strong className="text-slate-200">Point & Click element:</strong> Hover and click the button, card, or modal you want!
               </li>
               <li>
-                <strong className="text-slate-200">Instant Export:</strong> ReverseUI opens automatically with that exact element decompiled into clean React + Tailwind.
+                <strong className="text-slate-200">Auto-Opens ReverseUI:</strong> It immediately opens your running ReverseUI studio with the component decompiled!
               </li>
             </ol>
           </div>
 
           {/* Copy Script directly */}
-          <div className="pt-2">
+          <div className="pt-1">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs text-slate-400 font-medium">Or copy bookmark code manually:</span>
               <button
@@ -173,7 +210,7 @@ export const BookmarkletModal: React.FC<BookmarkletModalProps> = ({ isOpen, onCl
             <textarea
               readOnly
               value={bookmarkletCode}
-              rows={3}
+              rows={2}
               className="w-full rounded-lg bg-slate-950 border border-slate-800 p-2 font-mono text-[11px] text-slate-400 focus:outline-none resize-none"
             />
           </div>
