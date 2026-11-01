@@ -7,7 +7,7 @@ import {
   Sun,
   Grid,
   RotateCw,
-  Eye,
+  Sparkles,
 } from 'lucide-react';
 
 interface LiveSandboxProps {
@@ -72,48 +72,55 @@ export const LiveSandbox: React.FC<LiveSandboxProps> = ({ snippet }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-      {/* Sandbox Header */}
-      <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-slate-800 bg-slate-950/60">
-        <div className="flex items-center gap-2">
-          <Eye className="w-4 h-4 text-emerald-400" />
-          <h2 className="text-xs font-bold text-white uppercase tracking-wider">Live Sandbox</h2>
+    <div className="flex flex-col h-full bg-slate-900 border border-slate-800/80 rounded-2xl overflow-hidden shadow-sm">
+      {/* Sandbox Window Header */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-800 bg-slate-950/70">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+          </div>
+          <span className="text-xs font-bold text-white tracking-tight">Interactive Preview</span>
         </div>
 
         {/* Viewport Toggles */}
-        <div className="flex items-center gap-1 bg-slate-950 rounded-lg p-0.5 border border-slate-800">
+        <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
           <button
-            onClick={() => setViewport('mobile')}
-            className={`p-1.5 rounded text-xs transition-colors ${
-              viewport === 'mobile'
-                ? 'bg-slate-800 text-cyan-400 font-semibold'
+            onClick={() => setViewport('desktop')}
+            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+              viewport === 'desktop'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-750'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
-            title="Mobile (375px)"
+            title="Desktop"
           >
-            <Smartphone className="w-3.5 h-3.5" />
+            <Monitor className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Desktop</span>
           </button>
           <button
             onClick={() => setViewport('tablet')}
-            className={`p-1.5 rounded text-xs transition-colors ${
+            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
               viewport === 'tablet'
-                ? 'bg-slate-800 text-cyan-400 font-semibold'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-750'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
             title="Tablet (768px)"
           >
             <Tablet className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Tablet</span>
           </button>
           <button
-            onClick={() => setViewport('desktop')}
-            className={`p-1.5 rounded text-xs transition-colors ${
-              viewport === 'desktop'
-                ? 'bg-slate-800 text-cyan-400 font-semibold'
+            onClick={() => setViewport('mobile')}
+            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+              viewport === 'mobile'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-750'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
-            title="Desktop (100%)"
+            title="Mobile (375px)"
           >
-            <Monitor className="w-3.5 h-3.5" />
+            <Smartphone className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Phone</span>
           </button>
         </div>
 
@@ -121,28 +128,28 @@ export const LiveSandbox: React.FC<LiveSandboxProps> = ({ snippet }) => {
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setShowGrid(!showGrid)}
-            className={`p-1.5 rounded text-xs border transition-colors ${
+            className={`p-1.5 rounded-lg text-xs border transition-colors ${
               showGrid
                 ? 'bg-slate-800 border-slate-700 text-cyan-400'
-                : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
             }`}
-            title="Toggle alignment grid"
+            title="Toggle background grid"
           >
             <Grid className="w-3.5 h-3.5" />
           </button>
 
           <button
             onClick={() => setIsDarkCanvas(!isDarkCanvas)}
-            className="p-1.5 rounded text-xs bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
-            title={isDarkCanvas ? 'Switch to light canvas' : 'Switch to dark canvas'}
+            className="p-1.5 rounded-lg text-xs bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+            title={isDarkCanvas ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {isDarkCanvas ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-400" />}
           </button>
 
           <button
             onClick={() => setRefreshKey(prev => prev + 1)}
-            className="p-1.5 rounded text-xs bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
-            title="Reload sandbox preview"
+            className="p-1.5 rounded-lg text-xs bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+            title="Refresh preview"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
@@ -151,7 +158,7 @@ export const LiveSandbox: React.FC<LiveSandboxProps> = ({ snippet }) => {
 
       {/* Sandbox Viewport Stage */}
       <div
-        className={`relative flex-1 flex items-center justify-center p-4 transition-colors overflow-auto ${
+        className={`relative flex-1 flex items-center justify-center p-6 transition-colors overflow-auto ${
           isDarkCanvas ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-900'
         } ${
           showGrid
@@ -171,21 +178,25 @@ export const LiveSandbox: React.FC<LiveSandboxProps> = ({ snippet }) => {
               title="ReverseUI Interactive Live Sandbox"
               sandbox="allow-scripts"
               srcDoc={buildIframeDoc(snippet, isDarkCanvas)}
-              className="w-full h-full min-h-[350px] rounded-xl border border-dashed border-slate-800/80 shadow-inner bg-transparent"
+              className="w-full h-full min-h-[350px] rounded-2xl border border-dashed border-slate-800/80 shadow-2xl bg-transparent"
             />
           ) : (
             <div className="flex flex-col items-center justify-center p-8 text-center text-slate-500">
-              <p className="text-sm font-medium">No component markup loaded</p>
-              <p className="text-xs text-slate-600 mt-1">Select a preset on the left or paste your code snippet</p>
+              <Sparkles className="w-8 h-8 text-slate-600 mb-2" />
+              <p className="text-sm font-semibold text-slate-300">No component selected yet</p>
+              <p className="text-xs text-slate-500 mt-1">Pick a showcase preset on the left or paste a website link</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Sandbox Status Bar */}
-      <div className="px-3.5 py-1.5 border-t border-slate-800 bg-slate-950/70 flex items-center justify-between text-[11px] text-slate-400">
-        <span>Active Viewport: <strong className="text-slate-300 capitalize">{viewport}</strong></span>
-        <span>Isolated iframe Sandbox • Full CSS & Hover state emulation</span>
+      <div className="px-4 py-2 border-t border-slate-800 bg-slate-950/70 flex items-center justify-between text-xs text-slate-400">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Interactive Canvas • Hover to test animations</span>
+        </span>
+        <span className="text-[11px] text-slate-500 capitalize">{viewport} view</span>
       </div>
     </div>
   );

@@ -15,50 +15,44 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({ engineResult }) =>
   const [activeTab, setActiveTab] = useState<TabType>('code');
 
   return (
-    <div className="flex flex-col h-full bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
-      {/* Tabs Navigation Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800 bg-slate-950/60">
-        <div className="flex items-center gap-1">
+    <div className="flex flex-col h-full bg-slate-900 border border-slate-800/80 rounded-2xl overflow-hidden shadow-sm">
+      {/* Friendly Tabs Navigation Header */}
+      <div className="p-2 border-b border-slate-800 bg-slate-950/70">
+        <div className="grid grid-cols-3 gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
           <button
             onClick={() => setActiveTab('code')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-semibold transition-all ${
               activeTab === 'code'
-                ? 'bg-slate-800 text-cyan-400 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Code className="w-3.5 h-3.5" />
-            <span>React + Tailwind JSX</span>
+            <span>React Code</span>
           </button>
 
           <button
             onClick={() => setActiveTab('tokens')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-semibold transition-all ${
               activeTab === 'tokens'
-                ? 'bg-slate-800 text-cyan-400 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Palette className="w-3.5 h-3.5" />
-            <span>Design Tokens</span>
-            <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400">
-              {engineResult.tokens.colors.length}
-            </span>
+            <span>Design Specs</span>
           </button>
 
           <button
             onClick={() => setActiveTab('motion')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg font-semibold transition-all ${
               activeTab === 'motion'
-                ? 'bg-slate-800 text-cyan-400 border border-slate-700 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+                ? 'bg-slate-800 text-cyan-400 shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
-            <span>Motion Physics</span>
-            <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              Spring
-            </span>
+            <span>Motion Feel</span>
           </button>
         </div>
       </div>

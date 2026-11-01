@@ -28,12 +28,12 @@ export const Header: React.FC<HeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-base tracking-tight text-white">ReverseUI</span>
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                Client-Side Engine
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                100% Client-Side • $0/mo
               </span>
             </div>
             <p className="text-xs text-slate-400 hidden sm:block">
-              Reverse Engineer Any Web UI into Clean React 18 + Tailwind + Framer Motion
+              Turn any web inspiration into clean React + Tailwind components
             </p>
           </div>
         </div>
